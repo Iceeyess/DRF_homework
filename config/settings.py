@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'DRF_homework',
+        'NAME': 'drf_homework',
         'USER': 'postgres',
         'PASSWORD': 'Herbalife1',
         'PORT': 5432,

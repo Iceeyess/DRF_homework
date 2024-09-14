@@ -31,3 +31,5 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 
 class LessonDeleteAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
+
+

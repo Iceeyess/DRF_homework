@@ -9,24 +9,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Create user and payments"""
-        params = dict(username='test', email='test@example.com', password='qwerty')
-        try:
-            user = User.objects.create(**params)
-        except IntegrityError:
-            print('User with this email already exists.')
-            u = User.objects.get(username=params['username']).delete()
-            # u.save()
-            user = User.objects.create(**params)
-            user.is_staff = True
-            user.is_superuser = True
-            user.save()
-            print('User re-created successfully.')
-        else:
-            user.is_staff = True
-            user.is_superuser = True
-            user.save()
-            print('User created successfully.')
 
+        # Create user
+        params = dict(username='test', email='test@example.com', password='qwerty')
+        user, user_status = User.objects.get_or_create(**params)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        print('User created successfully.')
+
+    # Create payments
         payment1 = {
         'user': user,
         'payment_date': '2022-01-01',

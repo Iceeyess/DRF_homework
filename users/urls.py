@@ -15,4 +15,5 @@ urlpatterns = [
     path('payments/', views.PaymentsAPIView.as_view(), name='payment-list'),
     # get token
     path('token/', views.UserTokenObtainPairView.as_view(),name='user-token'),
+    # path('token/refresh/', views...as_view(),name='user-token'),
 ]

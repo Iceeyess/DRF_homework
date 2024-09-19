@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import UserSerializer, PaymentSerializer, UserTokenObtainPairSerializer
@@ -15,18 +16,22 @@ class UserCreateAPIView(generics.CreateAPIView):
 class UserListAPIView(generics.ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = (IsAuthenticated, )
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = (IsAuthenticated, )
 
 
 class UserUpdateAPIView(generics.UpdateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = (IsAuthenticated, )
 
 class UserDeleteAPIView(generics.DestroyAPIView):
     queryset = User.objects.all()
+    permission_classes = (IsAuthenticated, )
 
 class PaymentsAPIView(generics.ListAPIView):
     serializer_class = PaymentSerializer

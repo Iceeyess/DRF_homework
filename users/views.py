@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
-from .serializers import UserSerializer, PaymentSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+from .serializers import UserSerializer, PaymentSerializer, UserTokenObtainPairSerializer
 from users.models import User, Payment
 from rest_framework.filters import SearchFilter, OrderingFilter
 
@@ -34,3 +36,5 @@ class PaymentsAPIView(generics.ListAPIView):
     filterset_fields = ['paid_course', 'paid_lesson', 'type']
     ordering_fields = ['payment_date', ]
 
+class UserTokenObtainPairView(TokenObtainPairView):
+    serializer_class = UserTokenObtainPairSerializer

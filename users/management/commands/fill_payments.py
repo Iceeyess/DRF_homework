@@ -16,6 +16,7 @@ class Command(BaseCommand):
         if user_status:
             user.is_staff = True
             user.is_superuser = True
+            user.set_password(params.get('password', ''))
             user.save()
         print([f'User has already exists.', 'User was created successfully.'][user_status])
 

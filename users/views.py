@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import UserSerializer, PaymentSerializer, UserTokenObtainPairSerializer
@@ -12,6 +12,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 # Create your views here.
 class UserCreateAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
+    permission_classes = (AllowAny, )
 
 class UserListAPIView(generics.ListAPIView):
     serializer_class = UserSerializer

@@ -5,6 +5,7 @@ from users import views
 app_name = UsersConfig.name
 
 
+
 urlpatterns = [
     path('update/<int:pk>/', views.UserUpdateAPIView.as_view(), name='user-update'),
     path('create/', views.UserCreateAPIView.as_view(), name='user-create'),

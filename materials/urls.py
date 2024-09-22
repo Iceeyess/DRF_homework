@@ -14,6 +14,10 @@ router.register(r'courses', views.CourseViewSet, basename='courses')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('create/', views.LessonCreateAPIView.as_view(), name='lessons-create'),
     path('', views.LessonListAPIView.as_view(), name='lessons-list'),
+    path('create/', views.LessonCreateAPIView.as_view(), name='lessons-create'),
+    path('<int:pk>/', views.LessonRetrieveAPIView.as_view(), name='lessons-detail'),
+    path('<int:pk>/update/', views.LessonUpdateAPIView.as_view(), name='lessons-update'),
+    path('<int:pk>/delete/', views.LessonDeleteAPIView.as_view(), name='lessons-delete'),
+
 ] + router.urls

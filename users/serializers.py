@@ -16,6 +16,15 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+    def create(self, validated_data):
+        """Encrypt passport in Database and feedback serializer"""
+        user = super().create(validated_data)
+        user.set_password(user.password)
+        user.save()
+        return user
+
+
+
 class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
     """Класс для определения сериализатора токена"""
     @classmethod

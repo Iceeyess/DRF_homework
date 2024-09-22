@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from .permissions import IsModerator
 from .serializers import UserSerializer, PaymentSerializer, UserTokenObtainPairSerializer
 from users.models import User, Payment
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -17,22 +18,22 @@ class UserCreateAPIView(generics.CreateAPIView):
 class UserListAPIView(generics.ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated, ) # Почему конфликт этой настройки с settings?
+    permission_classes = (AllowAny, )
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsModerator, )
 
 
 class UserUpdateAPIView(generics.UpdateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsModerator, )
 
 class UserDeleteAPIView(generics.DestroyAPIView):
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAdminUser, )
 
 class PaymentsAPIView(generics.ListAPIView):
     serializer_class = PaymentSerializer

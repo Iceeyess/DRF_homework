@@ -8,7 +8,7 @@ from django.db.utils import IntegrityError
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        """Create user and payments"""
+        """Create superuser and payments"""
 
         # Create user
         params = dict(username='test', email='test@example.com', password='qwerty')

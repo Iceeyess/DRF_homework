@@ -8,29 +8,18 @@ from django.db.utils import IntegrityError
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        """Create superuser and payments"""
+        """Create  payments"""
 
-        # Create user
-        params = dict(username='test', email='test@example.com', password='qwerty')
-        user, user_status = User.objects.get_or_create(**params)
-        if user_status:
-            user.is_staff = True
-            user.is_superuser = True
-            user.set_password(params.get('password', ''))
-            user.save()
-        print([f'User has already exists.', 'User was created successfully.'][user_status])
-
-    # Create payments
         payment1 = {
-        'user': user,
+        'user': User.objects.get(username=),
         'payment_date': '2022-01-01',
         'paid_course': Course.objects.get(pk=1),
         'paid_lesson': None,
         'amount': 100,
         'type': 'наличные'
-    }
+        }
         payment2 = {
-            'user': user,
+            'user': users_list[0],
             'payment_date': '2022-10-01',
             'paid_course': Course.objects.get(pk=1),
             'paid_lesson': Lesson.objects.get(pk=1),
@@ -38,7 +27,7 @@ class Command(BaseCommand):
             'type': 'перевод'
         }
         payment3 = {
-            'user': user,
+            'user': users_list[2],
             'payment_date': '2024-09-12',
             'paid_course': Course.objects.get(pk=1),
             'paid_lesson': Lesson.objects.get(pk=2),

@@ -35,4 +35,4 @@ class Command(BaseCommand):
             'type': 'перевод'
         }
         [Payment.objects.create(**payment) for payment in (payment1, payment2, payment3)]
-        print('Payment created successfully.')
+        print('Payments created successfully.')

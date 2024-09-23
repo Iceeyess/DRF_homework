@@ -30,7 +30,7 @@ class Command(BaseCommand):
                               ContentType.objects.get_or_create(model='course')[0].id,
                            'codename': 'can_update_courses'}
                       }
-        main_user = User.objects.get(username='test')
+        main_user = User.objects.get(username='admin')
         group_, status = Group.objects.get_or_create(name='moderators')
         if status:
             #  assign moderators group

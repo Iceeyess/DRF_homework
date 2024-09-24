@@ -8,5 +8,5 @@ class IsOwner(permissions.BasePermission):
         return request.user == view.queryset.model.objects.get(pk=view.kwargs.get('pk')).owner
 
     def has_object_permission(self, request, view, obj):
-        print(2, request.user == view.queryset.model.objects.get(pk=view.kwargs.get('pk')))
-        return request.user == view.queryset.model.objects.get(pk=view.kwargs.get('pk'))
+        print(2, request.user == obj.owner)
+        return request.user == obj.owner

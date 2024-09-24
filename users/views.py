@@ -4,8 +4,8 @@ from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .permissions import IsModerator
-from .serializers import UserSerializer, PaymentSerializer, UserTokenObtainPairSerializer
+from .permissions import IsModerator, MyOwn
+from .serializers import UserSerializer, PaymentSerializer, UserTokenObtainPairSerializer, UserSerializerReadOnly
 from users.models import User, Payment
 from rest_framework.filters import SearchFilter, OrderingFilter
 
@@ -21,15 +21,17 @@ class UserListAPIView(generics.ListAPIView):
     permission_classes = (AllowAny, )
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
-    serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = (IsModerator, )
+    permission_classes = (IsModerator | MyOwn, )
+    serializer_class = UserSerializer if permission_classes else UserSerializerReadOnly
+
+
 
 
 class UserUpdateAPIView(generics.UpdateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = (IsModerator, )
+    permission_classes = (IsModerator | MyOwn, )
 
 class UserDeleteAPIView(generics.DestroyAPIView):
     queryset = User.objects.all()

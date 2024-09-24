@@ -11,7 +11,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
-    payments = PaymentSerializer(source='payment_set', many=True, read_only=True)
+    payments = PaymentSerializer(source='payment_set', many=True,)
     class Meta:
         model = User
         fields = '__all__'
@@ -23,7 +23,11 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-
+class UserSerializerReadOnly(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'first_name', )
+        read_only_fields = ('id', 'username', 'email')
 
 class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
     """Класс для определения сериализатора токена"""

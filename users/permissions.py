@@ -11,11 +11,6 @@ class IsModerator(permissions.BasePermission):
         print(4, request.user.groups.filter(name='moderators').exists())
         return request.user.groups.filter(name='moderators').exists()
 
-class MyOwn(permissions.BasePermission):
-    """class for checking my-own user model"""
+class IsCanEdit(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            print(5, request.user == obj)
-            return request.user == obj
-        return False
-
+        return request.user == obj

@@ -4,10 +4,12 @@ from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .permissions import IsModerator, MyOwn
+from .permissions import IsModerator, IsCanEdit
 from .serializers import UserSerializer, PaymentSerializer, UserTokenObtainPairSerializer, UserSerializerReadOnly
 from users.models import User, Payment
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework import permissions
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -22,16 +24,20 @@ class UserListAPIView(generics.ListAPIView):
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
-    permission_classes = (IsModerator | MyOwn, )
-    serializer_class = UserSerializer if permission_classes else UserSerializerReadOnly
+    permission_classes = (IsAuthenticated, )
 
-
+    def get_serializer_class(self):
+        obj = self.get_object()
+        return UserSerializer if self.request.user == obj else UserSerializerReadOnly
 
 
 class UserUpdateAPIView(generics.UpdateAPIView):
-    serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = (IsModerator | MyOwn, )
+    permission_classes = (IsAuthenticated, IsCanEdit,  )
+
+    def get_serializer_class(self):
+        obj = self.get_object()
+        return UserSerializer if self.request.user == obj else UserSerializerReadOnly
 
 class UserDeleteAPIView(generics.DestroyAPIView):
     queryset = User.objects.all()

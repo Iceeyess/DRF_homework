@@ -11,3 +11,4 @@ Windows:
 - python manage.py migrate
 - python main.py
 
+or just run python main.py

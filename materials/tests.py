@@ -98,3 +98,40 @@ class LessonsTestCase(APITestCase):
         response = self.client.delete(url, headers=self.headers, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+class SubscribeAPITestCase(APITestCase):
+    def setUp(self) -> None:
+        # user creation
+        self.user_date = dict(username='iceeyes', password='1234', email='test@gmail.com', is_staff=True, \
+                              is_superuser=True)
+        self.client = APIClient()
+        self.user = User.objects.create_user(**self.user_date)
+
+        #   auth user
+        self.auth_url = reverse('user:user-token')
+        self.access_token = self.client.post(self.auth_url, {
+            'username': self.user_date.get('username'),
+            'password': self.user_date.get('password')
+        }).data.get('access')
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.access_token}')
+        self.headers = {
+            'Authorization': f'Token {self.access_token}',
+            'Content-Type': 'application/json'
+        }
+        self.data_for_course = {
+            'name': 'Python',
+            'description': 'Course of Python',
+        }
+        self.course = Course.objects.create(**self.data_for_course)
+
+    def test_subscribe_course(self):
+        """Тестирование подписки на курс"""
+        url = reverse('materials:subscribe')
+        data = {'course': self.course.id}
+        response = self.client.post(path=url, data=data, headers=self.headers, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content).get('answer'), f"Курс {self.course} был добавлен к "
+                                                                     f"{self.user} пользователю.")
+        response = self.client.post(path=url, data=data, headers=self.headers, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content).get('answer'), f"Курс {self.course} был удален у "
+                                                                     f"{self.user} пользователя.")

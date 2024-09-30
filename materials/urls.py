@@ -10,7 +10,7 @@ from materials import views
 app_name = MaterialsConfig.name
 
 router = DefaultRouter()
-router.register(r'courses', views.CourseViewSet, basename='courses')
+router.register(r'courses', views.CourseViewSet, basename='course')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

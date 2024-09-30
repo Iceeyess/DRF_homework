@@ -6,6 +6,7 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse, reverse_lazy
 import json
+from django.contrib.auth.models import Group
 
 from materials.models import Course
 from users.models import User
@@ -20,9 +21,20 @@ class LessonsTestCase(APITestCase):
 
     def setUp(self) -> None:
         # user creation
-        self.user_date = dict(username='iceeyes', password='1234', email='test@gmail.com')
+        self.user_date = dict(username='iceeyes', password='1234', email='test@gmail.com', is_staff=True, \
+                              is_superuser=True)
         self.client = APIClient()
         self.user = User.objects.create_user(**self.user_date)
+        # create group
+        main_user = User.objects.get(username='iceeyes')
+        group_, status = Group.objects.get_or_create(name='moderators')
+        if status:
+            #  assign moderators group
+            group_.save()
+            main_user.groups.add(group_)
+            print(f'Группа {group_} создана и была назначена пользователю {main_user}.')
+        else:
+            print('Группа с таким именем уже существует.')
         #   auth user
         self.auth_url = reverse_lazy('user:user-token')
         self.access_token = self.client.post(self.auth_url, {
@@ -39,15 +51,16 @@ class LessonsTestCase(APITestCase):
         """Тестирование создание Урока"""
         data_for_course = {
             'name': 'Python',
-            'description': 'Course for Python',
+            'description': 'Course of Python',
         }
-        course = Course.objects.create(**data_for_course)
+        create_course_url = reverse_lazy('materials:course-create')
+        self.course = self.client.post(path=create_course_url, data=data_for_course, headers=self.headers)
         data_for_lesson = {
             'name': 'Кортежи',
             'description': 'Создание кортежей',
-            'course': course.id
+            'course': self.course
         }
-        lesson_url = reverse_lazy('materials:courses')
+        lesson_url = reverse_lazy('materials:')
         response = self.client.post(path=lesson_url, data=data_for_lesson, headers=self.headers)
         print(response.json())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

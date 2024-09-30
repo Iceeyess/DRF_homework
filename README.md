@@ -11,3 +11,12 @@ Windows:
 - python manage.py migrate
 - python main.py
 
+or just run:
+- python main.py
+
+Meanwhile, I have completed with testing cases coverage, there was 76% percentage coveraged.
+You can use following commands:
+- pip install coverage
+- coverage run --source='.' manage.py test
+- coverage report
+

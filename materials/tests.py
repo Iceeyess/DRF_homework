@@ -3,12 +3,14 @@ from django.test import TestCase
 # Create your tests here.
 from django.test import TestCase
 from rest_framework.test import APITestCase, APIClient
+from django.test.client import encode_multipart, RequestFactory
+
 from rest_framework import status
 from django.urls import reverse, reverse_lazy
 import json
 from django.contrib.auth.models import Group
 
-from materials.models import Course
+from materials.models import Course, Lesson
 from users.models import User
 
 
@@ -17,7 +19,7 @@ from users.models import User
 
 
 class LessonsTestCase(APITestCase):
-    """Тестирование модели Vehicle"""
+    """Тестирование CRUD Lessons"""
 
     def setUp(self) -> None:
         # user creation
@@ -36,7 +38,7 @@ class LessonsTestCase(APITestCase):
         else:
             print('Группа с таким именем уже существует.')
         #   auth user
-        self.auth_url = reverse_lazy('user:user-token')
+        self.auth_url = reverse('user:user-token')
         self.access_token = self.client.post(self.auth_url, {
             'username': self.user_date.get('username'),
             'password': self.user_date.get('password')
@@ -46,32 +48,53 @@ class LessonsTestCase(APITestCase):
             'Authorization': f'Token {self.access_token}',
             'Content-Type': 'application/json'
         }
-
-    def test_create_lesson(self):
-        """Тестирование создание Урока"""
-        data_for_course = {
+        self.data_for_course = {
             'name': 'Python',
             'description': 'Course of Python',
         }
-        create_course_url = reverse_lazy('materials:course-create')
-        self.course = self.client.post(path=create_course_url, data=data_for_course, headers=self.headers)
-        data_for_lesson = {
+        self.course = Course.objects.create(**self.data_for_course)
+        self.data_for_lesson = {
             'name': 'Кортежи',
             'description': 'Создание кортежей',
-            'course': self.course
+            'course': self.course.id,
+            'video_link': 'https://www.youtube.com'
         }
-        lesson_url = reverse_lazy('materials:')
-        response = self.client.post(path=lesson_url, data=data_for_lesson, headers=self.headers)
-        print(response.json())
+
+
+    def test_create_lesson(self):
+        """Тестирование создание Урока"""
+        lesson_url = reverse('materials:lessons-create')
+        response = self.client.post(path=lesson_url, data=self.data_for_lesson, headers=self.headers, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(json.loads(response.content).get('name'), 'Python')
+        self.assertEqual(json.loads(response.content).get('name'), 'Кортежи')
 
 
-    def test_list_moto(self):
-        """Тестирование списка мото"""
-        Moto.objects.create(title='Test moto', description='Test description')
-        url = reverse('vehicle:moto-list')
+    def test_list_lesson(self):
+        """Тестирование списка уроков"""
+        lesson_url = reverse('materials:lessons-create')
+        response = self.client.post(path=lesson_url, data=self.data_for_lesson, headers=self.headers, format='json')
+        url = reverse('materials:lessons-list')
         response = self.client.get(url, headers=self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(len(response.json().get('results')) > 0)
+
+    def test_update_lesson(self):
+        """Тестирование обновления урока"""
+        self.data_for_lesson.update({'course': self.course})
+        lesson = Lesson.objects.create(**self.data_for_lesson)
+        url = reverse('materials:lessons-update', kwargs={'pk': lesson.id})
+        # changed_data = {'name': 'Списки'}
+        changed_data = {'name': 'Списки', 'description': 'Урок по спискам', 'course': lesson.id, 'video_link': 'https://www.youtube.com/watch', 'owner': self.course.owner}
+        response = self.client.put(url, data=changed_data, headers=self.headers, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get('name'), 'Списки')
+
+    def test_delete_lesson(self):
+        """Тестирование удаления урока"""
+        self.data_for_lesson.update({'course': self.course})
+        lesson = Lesson.objects.create(**self.data_for_lesson)
+        print(lesson)
+        url = reverse('materials:lessons-delete', kwargs={'pk': lesson.id})
+        response = self.client.delete(url, headers=self.headers, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 

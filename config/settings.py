@@ -12,18 +12,24 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+dot_env = os.path.join(BASE_DIR, '.env')
+load_dotenv(dotenv_path=dot_env)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p5+7s=1462ir3mqwo%y$f%8tl9tm2r^u^g073yv+x=p@3k400j'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -82,11 +88,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'drf_homework',
-        'USER': 'postgres',
-        'PASSWORD': 'Herbalife1',
-        'PORT': 5432,
+        'ENGINE': os.getenv('ENGINE'),
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'PORT': os.getenv('PORT'),
     }
 }
 
@@ -201,5 +207,5 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOW_ALL_ORIGINS = False
 
-CREATE_PRODUCT_LINK = 'https://api.stripe.com/v1/products'
-SECREY_KEY_IN_STRIPE = 'sk_test_51Q5Xg8GIug5DXRxS5jp6TrwjYgK4ZSw8iSJ9LRqPdCYOo2kFKw63EMl54juzaMQb7CT6sN7t580FupBllreKOMgP00nEMfHpuF'
+CREATE_PRODUCT_LINK = os.getenv('CREATE_PRODUCT_LINK')
+SECREY_KEY_IN_STRIPE = os.getenv('SECREY_KEY_IN_STRIPE')

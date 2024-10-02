@@ -83,9 +83,10 @@ class LessonsTestCase(APITestCase):
         self.data_for_lesson.update({'course': self.course})
         lesson = Lesson.objects.create(**self.data_for_lesson)
         url = reverse('materials:lessons-update', kwargs={'pk': lesson.id})
-        # changed_data = {'name': 'Списки'}
-        changed_data = {'name': 'Списки', 'description': 'Урок по спискам', 'course': lesson.id, 'video_link': 'https://www.youtube.com/watch', 'owner': self.course.owner}
-        response = self.client.put(url, data=changed_data, headers=self.headers, format='json')
+        changed_data = {'name': 'Списки'}
+        # changed_data = {'name': 'Списки', 'description': 'Урок по спискам', 'course': lesson.id, 'video_link': 'https://www.youtube.com/watch', 'owner': self.course.owner}
+        response = self.client.patch(url, data=changed_data, headers=self.headers, format='json')
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get('name'), 'Списки')
 

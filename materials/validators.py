@@ -9,5 +9,7 @@ class VideoLinkValidator:
     def __call__(self, value):
         tmp_val = dict(value).get(self.field)
         search_phrase = 'www.youtube.com'
-        if not search_phrase in tmp_val:
+        if tmp_val and not (search_phrase in tmp_val):
             raise ValidationError('Video link is not valid')
+
+

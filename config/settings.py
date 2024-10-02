@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'payment',
     'drf_yasg',  # Документация
+    'corsheaders', # Механизм API для браузера, чтоб можно было подключать сторонние ресурсы
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Для работы с CORS
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -187,3 +189,17 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+CORS_ALLOWED_ORIGINS = [
+    '<http://localhost:8000>',  # Замените на адрес вашего фронтенд-сервера
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com", #  Замените на адрес вашего фронтенд-сервера
+    # и добавьте адрес бэкенд-сервера
+]
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+CREATE_PRODUCT_LINK = 'https://api.stripe.com/v1/products'
+SECREY_KEY_IN_STRIPE = 'sk_test_51Q5Xg8GIug5DXRxS5jp6TrwjYgK4ZSw8iSJ9LRqPdCYOo2kFKw63EMl54juzaMQb7CT6sN7t580FupBllreKOMgP00nEMfHpuF'

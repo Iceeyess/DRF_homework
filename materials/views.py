@@ -11,7 +11,9 @@ from materials.permissions import IsOwner
 from materials.serializers import CourseSerializer, LessonSerializer
 from payment.models import Subscription
 from users.permissions import IsModerator
-
+from requests.exceptions import RequestException
+import requests
+from config import settings
 
 # Create your views here.
 class CourseViewSet(viewsets.ModelViewSet):
@@ -23,6 +25,10 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    def post(self, *args, **kwargs):
+
+        create_stripe_obj =
 
 
 class LessonCreateAPIView(generics.CreateAPIView):

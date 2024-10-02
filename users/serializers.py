@@ -1,16 +1,15 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, AuthUser
 from rest_framework_simplejwt.tokens import Token
 
-from users.models import User, Payment
+from payment.serializers import PaymentSerializer
+from users.models import User
 from rest_framework import serializers
 
 
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = '__all__'
+
 
 class UserSerializer(serializers.ModelSerializer):
+    """Класс-сериализатор для пользователя (собственный)"""
     payments = PaymentSerializer(source='payment_set', many=True,)
     class Meta:
         model = User
@@ -24,6 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class UserSerializerReadOnly(serializers.ModelSerializer):
+    """Класс-сериализатор для пользователя (чужой)"""
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name', )

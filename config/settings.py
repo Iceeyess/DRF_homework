@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django_filters',
     'materials',
     'users',
+    'payment',
+    'drf_yasg',  # Документация
 ]
 
 MIDDLEWARE = [

@@ -4,9 +4,10 @@ from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from payment.models import Payment
 from .permissions import IsModerator, IsCanEdit
 from .serializers import UserSerializer, PaymentSerializer, UserTokenObtainPairSerializer, UserSerializerReadOnly
-from users.models import User, Payment
+from users.models import User
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404

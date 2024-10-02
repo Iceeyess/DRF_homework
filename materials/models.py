@@ -39,3 +39,4 @@ class Lesson(models.Model):
         verbose_name = 'курс'
         verbose_name_plural = 'курсы'
         ordering = ('pk', )
+

@@ -8,11 +8,10 @@ def create_session(instance):
         payment_method_types=['card'],
         line_items=[
             {
-                'price': ,
+                'price': instance,
                 'quantity': 1,
             },
         ],
         mode='payment',
-        success_url='https://127.0.0.1:8000/',
-        cancel_url=settings.CANCEL_URL,
+        success_url='https://127.0.0.1:8000/'
     )

@@ -2,10 +2,14 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 
 from materials.models import Course
-from payment.models import Subscription
-from payment.serializers import SubscriptionSerializer
+from payment.models import Subscription, Session
+from payment.serializers import SubscriptionSerializer, PaymentSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+
+from payment.services import create_session
+
+
 # Create your views here.
 
 
@@ -28,4 +32,12 @@ class AssignCourse(APIView):
         return Response({'answer': message})
 
 class PaymentAPIView(APIView):
-    pass
+    serializer = PaymentSerializer
+    def post(self, request, *args, **kwargs):
+        data = self.request.data
+        session = create_session(data['paid_course'])
+        if not session:
+            return Response({'error': 'Failed to create session'})
+        else:
+            Session.objects.create(session_id=session.id, url=session.url)
+            return Response({'session_id': session.id, 'url': session.url})

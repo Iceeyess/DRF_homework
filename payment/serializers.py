@@ -15,3 +15,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = '__all__'
+
+    def perform_create(self, serializer):
+        """Encrypt passport in Database and feedback serializer"""
+        serializer.save(owner=self.context['request'].user)

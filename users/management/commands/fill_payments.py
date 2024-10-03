@@ -12,7 +12,7 @@ class Command(BaseCommand):
         """Create  payments"""
 
         payment1 = {
-            'user': User.objects.get(username='staff'),
+            'owner': User.objects.get(username='staff'),
             'payment_date': '2022-01-01',
             'paid_course': Course.objects.get(pk=1),
             'paid_lesson': Lesson.objects.get(pk=1),
@@ -20,7 +20,7 @@ class Command(BaseCommand):
             'type': 'наличные'
         }
         payment2 = {
-            'user': User.objects.get(username='staff'),
+            'owner': User.objects.get(username='staff'),
             'payment_date': '2022-10-01',
             'paid_course': Course.objects.get(pk=1),
             'paid_lesson': Lesson.objects.get(pk=2),
@@ -28,7 +28,7 @@ class Command(BaseCommand):
             'type': 'перевод'
         }
         payment3 = {
-            'user': User.objects.get(username='staff'),
+            'owner': User.objects.get(username='staff'),
             'payment_date': '2024-09-12',
             'paid_course': Course.objects.get(pk=1),
             'paid_lesson': Lesson.objects.get(pk=3),

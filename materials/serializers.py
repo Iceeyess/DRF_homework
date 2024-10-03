@@ -2,11 +2,12 @@ from rest_framework import serializers
 
 from materials.models import Course, Lesson
 from materials.validators import VideoLinkValidator
-from payment.models import  Subscription
+from payment.models import Subscription
 
 
 class LessonSerializer(serializers.ModelSerializer):
     """Класс-сериализатор урока"""
+
     class Meta:
         model = Lesson
         fields = '__all__'
@@ -16,7 +17,7 @@ class LessonSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     """Класс-сериализатор курса"""
     lessons_qty = serializers.SerializerMethodField()
-    lessons = LessonSerializer(source='lesson_set', many=True)
+    lessons = LessonSerializer(source='lesson_set', many=True, read_only=True)
     HasSubscription = serializers.SerializerMethodField()
 
     def get_lessons_qty(self, obj):
@@ -29,6 +30,5 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['name', 'preview', 'description', 'lessons_qty', 'lessons', 'HasSubscription']
-
-
+        fields = ['name', 'price', 'preview', 'description', 'stripe_name_id', 'stripe_price_id', 'lessons_qty',
+                  'lessons', 'HasSubscription']

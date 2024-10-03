@@ -14,21 +14,24 @@ from users.permissions import IsModerator
 from requests.exceptions import RequestException
 import requests
 from config import settings
+from . import services
+from rest_framework import status
+
 
 # Create your views here.
 class CourseViewSet(viewsets.ModelViewSet):
     """Класс-представление для автомобиля"""
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
-    permission_classes = [IsModerator, IsOwner ]
+    # permission_classes = [IsModerator, IsOwner ]
     pagination_class = CoursesPageNumberPagination
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+        created_product = services.create_product(serializer)
+        created_price = services.create_price(serializer, created_product)
+        serializer.save(stripe_name_id=created_product.id, stripe_price_id=created_price.id)
 
-    def post(self, *args, **kwargs):
-
-        create_stripe_obj =
 
 
 class LessonCreateAPIView(generics.CreateAPIView):

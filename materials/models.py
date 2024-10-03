@@ -1,3 +1,5 @@
+from tabnanny import verbose
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import CASCADE
@@ -11,9 +13,12 @@ NULLABLE = dict(null=True, blank=True)
 
 class Course(models.Model):
     name = models.CharField(max_length=150, verbose_name='Название')
-    preview = models.ImageField(upload_to='courses/', verbose_name='Изображение курса')
-    description = models.TextField(verbose_name='Описание')
+    price = models.FloatField(verbose_name='Стоимость', **NULLABLE)
+    preview = models.ImageField(upload_to='courses/', verbose_name='Изображение курса', **NULLABLE)
+    description = models.TextField(verbose_name='Описание', **NULLABLE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name= 'Пользователь', **NULLABLE)
+    stripe_name_id = models.CharField(max_length=1000, verbose_name='ID от продукта на сайте stripe.com', **NULLABLE)
+    stripe_price_id = models.CharField(verbose_name='Цена', **NULLABLE)
 
     def __repr__(self):
         return self.name
@@ -29,7 +34,7 @@ class Lesson(models.Model):
     description = models.TextField(verbose_name='Описание')
     preview = models.ImageField(upload_to='lessons/', verbose_name='Изображение Урока', **NULLABLE)
     video_link = models.URLField(verbose_name='Ссылка на видео', default=None)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Ключ на курс')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Ключ на курс', **NULLABLE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name= 'Пользователь', **NULLABLE)
 
     def __repr__(self):
@@ -39,3 +44,4 @@ class Lesson(models.Model):
         verbose_name = 'курс'
         verbose_name_plural = 'курсы'
         ordering = ('pk', )
+

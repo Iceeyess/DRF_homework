@@ -2,7 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import BaseCommand
 from django.contrib.auth.models import Group, Permission, ContentType
 from materials.models import Course, Lesson
-from users.models import User, Payment
+from users.models import User
+from payment.models import Payment
 from django.db.utils import IntegrityError
 
 

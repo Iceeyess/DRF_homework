@@ -1,7 +1,8 @@
 from django.core.management import BaseCommand
 
 from materials.models import Course, Lesson
-from users.models import User, Payment
+from users.models import User
+from payment.models import Payment
 from django.db.utils import IntegrityError
 
 
@@ -11,12 +12,12 @@ class Command(BaseCommand):
         """Create  payments"""
 
         payment1 = {
-        'user': User.objects.get(username='staff'),
-        'payment_date': '2022-01-01',
-        'paid_course': Course.objects.get(pk=1),
-        'paid_lesson': Lesson.objects.get(pk=1),
-        'amount': 100,
-        'type': 'наличные'
+            'user': User.objects.get(username='staff'),
+            'payment_date': '2022-01-01',
+            'paid_course': Course.objects.get(pk=1),
+            'paid_lesson': Lesson.objects.get(pk=1),
+            'amount': 100,
+            'type': 'наличные'
         }
         payment2 = {
             'user': User.objects.get(username='staff'),

@@ -18,7 +18,7 @@ class Course(models.Model):
     description = models.TextField(verbose_name='Описание', **NULLABLE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name= 'Пользователь', **NULLABLE)
     stripe_name_id = models.CharField(max_length=1000, verbose_name='ID от продукта на сайте stripe.com', **NULLABLE)
-    stripe_price_id = models.CharField(verbose_name='Цена', **NULLABLE)
+    stripe_price_id = models.CharField(max_length=1000, verbose_name='Цена', **NULLABLE)
 
     def __repr__(self):
         return self.name

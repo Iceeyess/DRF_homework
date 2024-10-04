@@ -18,7 +18,9 @@ class Payment(models.Model):
     paid_course = models.ForeignKey(Course, on_delete=models.SET_NULL, verbose_name='Оплаченный курс', **NULLABLE)
     paid_lesson = models.ForeignKey(Lesson, on_delete=models.SET_NULL, verbose_name='Оплаченный урок', **NULLABLE)
     amount = models.DecimalField(decimal_places=2, max_digits=20, verbose_name='Сумма')
+    status = models.CharField(default='unpaid', max_length=255, verbose_name='Статус оплаты')
     type = models.CharField(max_length=255, verbose_name='Тип оплаты')
+    session = models.ForeignKey('Session', on_delete=models.SET_NULL, verbose_name='Сессия оплаты', **NULLABLE)
 
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', **NULLABLE)
@@ -35,6 +37,7 @@ class Subscription(models.Model):
 class Session(models.Model):
     """Класс сессии оплат"""
     session_id = models.CharField(max_length=1000)
+    payment_id = models.CharField(max_length=255, **NULLABLE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     url = models.TextField(**NULLABLE)

@@ -62,7 +62,7 @@ class SessionAPIView(APIView):
     def get(self, request, *args, **kwargs):
         session_obj = get_object_or_404(Session, id=kwargs.get('pk'))
         response_session = get_session(session_obj)
-        if response_session.payment_status == 'paid':
+        if response_session.payment_status == 'paid' and not Payment.objects.get(session=session_obj).status == 'paid':
             payment = Payment.objects.get(session=session_obj)
             payment.status = 'paid'
             payment.save()

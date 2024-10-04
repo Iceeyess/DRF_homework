@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from payment.models import Subscription, Payment
+from payment.models import Subscription, Payment, Session
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
@@ -19,3 +19,9 @@ class PaymentSerializer(serializers.ModelSerializer):
     def perform_create(self, serializer):
         """Encrypt passport in Database and feedback serializer"""
         serializer.save(owner=self.context['request'].user)
+
+class SessionSerializer(serializers.ModelSerializer):
+    """Класс-сериализатор сессии"""
+    class Meta:
+        model = Session
+        fields = '__all__'

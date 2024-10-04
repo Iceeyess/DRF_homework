@@ -7,7 +7,7 @@ import stripe
 def create_product(instance):
     """Создание продукта в stripe.com"""
     stripe.api_key = settings.SECREY_KEY_IN_STRIPE
-    return stripe.Product.create(name=instance.instance)
+    return stripe.Product.create(name=instance.instance.name)
 
 
 def create_price(instance, created_product):

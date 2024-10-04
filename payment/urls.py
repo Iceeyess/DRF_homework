@@ -5,7 +5,8 @@ app_name = PaymentConfig.name
 
 urlpatterns = [
     # payment
-    path('create/', views.PaymentAPIView.as_view(), name='payment-create'),
+    path('create/', views.PaymentSessionAPIView.as_view(), name='payment-create'),
+    path('<int:pk>/', views.SessionAPIView.as_view(), name='session-view'),
     # post subscription
     path('subscribe/', views.AssignCourse.as_view(), name='subscribe'),
 ]

@@ -15,3 +15,10 @@ def create_session(instance):
         mode='payment',
         success_url='https://127.0.0.1:8000/'
     )
+
+def get_session(instance):
+    """Возврат ответа по результату сессии"""
+    stripe.api_key = settings.SECREY_KEY_IN_STRIPE
+    return stripe.checkout.Session.retrieve(
+        instance.session_id,
+    )

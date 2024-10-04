@@ -9,7 +9,7 @@ from materials.models import Course, Lesson
 from materials.pagination import CoursesPageNumberPagination, LessonsPageNumberPagination
 from materials.permissions import IsOwner
 from materials.serializers import CourseSerializer, LessonSerializer
-from payment.models import Subscription
+from payment.models import Subscription, Payment
 from users.permissions import IsModerator
 from requests.exceptions import RequestException
 import requests

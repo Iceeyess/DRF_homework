@@ -23,6 +23,7 @@ class Payment(models.Model):
     session = models.ForeignKey('Session', on_delete=models.SET_NULL, verbose_name='Сессия оплаты', **NULLABLE)
 
 class Subscription(models.Model):
+    """Класс подписки на курс"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', **NULLABLE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс', **NULLABLE)
 

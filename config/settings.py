@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'payment',
     'drf_yasg',  # Документация
     'corsheaders', # Механизм API для браузера, чтоб можно было подключать сторонние ресурсы
+    'django_celery_beat',  # отдельное приложение для контроля периодических задач.
 ]
 
 MIDDLEWARE = [
@@ -210,3 +211,33 @@ CORS_ALLOW_ALL_ORIGINS = False
 
 CREATE_PRODUCT_LINK = os.getenv('CREATE_PRODUCT_LINK')
 SECREY_KEY_IN_STRIPE = os.getenv('SECREY_KEY_IN_STRIPE')
+
+# Настройки для Celery
+
+# URL-адрес брокера сообщений
+CELERY_BROKER_URL = 'redis://localhost:6379/0' # Например, Redis, который по умолчанию работает на порту 6379
+
+# URL-адрес брокера результатов, также Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# Часовой пояс для работы Celery
+
+# redis connection
+CACHES_ENABLED = True
+if CACHES_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv('CACHE_LOCATION'),
+        }
+    }
+
+# email settings
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL')
+# settings for email sent in background without sending in fact.
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sending_emails_log')

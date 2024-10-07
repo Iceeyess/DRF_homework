@@ -17,10 +17,12 @@ from config import settings
 from . import services
 from rest_framework import status
 
+from .tasks import sending_mails
+
 
 # Create your views here.
 class CourseViewSet(viewsets.ModelViewSet):
-    """Класс-представление для автомобиля"""
+    """Класс-представление для курса"""
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     # permission_classes = [IsModerator, IsOwner ]
@@ -32,7 +34,10 @@ class CourseViewSet(viewsets.ModelViewSet):
         created_price = services.create_price(serializer, created_product)
         serializer.save(stripe_name_id=created_product.id, stripe_price_id=created_price.id)
 
-
+    def update(self, request, *args, **kwargs):
+        updated_instance = super().update(request, *args, **kwargs)
+        sending_mails.delay(kwargs.get('pk'), request.data)
+        return updated_instance
 
 class LessonCreateAPIView(generics.CreateAPIView):
     """Класс-представление для урока. Создание"""

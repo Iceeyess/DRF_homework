@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -35,8 +37,13 @@ class CourseViewSet(viewsets.ModelViewSet):
         serializer.save(stripe_name_id=created_product.id, stripe_price_id=created_price.id)
 
     def update(self, request, *args, **kwargs):
+        """Обновление курса, проверка, если интервал между прошлым обновлением более 4 часов,
+        то запускается task sending_mails"""
+        updated_date = Course.objects.get(pk=kwargs.get('pk')).updated_date
+        diff_delta = datetime.now() - updated_date.replace(tzinfo=None)
         updated_instance = super().update(request, *args, **kwargs)
-        sending_mails.delay(kwargs.get('pk'), request.data)
+        if  diff_delta > timedelta(hours=4):
+            sending_mails.delay(kwargs.get('pk'), request.data)
         return updated_instance
 
 class LessonCreateAPIView(generics.CreateAPIView):

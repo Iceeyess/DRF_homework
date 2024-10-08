@@ -241,3 +241,10 @@ EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL')
 # settings for email sent in background without sending in fact.
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sending_emails_log')
+
+CELERY_BEAT_SCHEDULE = {
+    'task-name': {
+        'task': 'users.tasks.block_user',  # Путь к задаче
+        'schedule': timedelta(days=1),  # Расписание выполнения задачи (например, каждые 10 минут)
+    },
+}

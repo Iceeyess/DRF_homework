@@ -19,6 +19,7 @@ class Course(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name= 'Пользователь', **NULLABLE)
     stripe_name_id = models.CharField(max_length=1000, verbose_name='ID от продукта на сайте stripe.com', **NULLABLE)
     stripe_price_id = models.CharField(max_length=1000, verbose_name='Цена', **NULLABLE)
+    updated_date = models.DateTimeField(verbose_name='Дата обновления', auto_now=True, **NULLABLE)
 
     def __repr__(self):
         return self.name

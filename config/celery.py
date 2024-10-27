@@ -5,9 +5,13 @@ from dotenv import load_dotenv
 
 from config import settings
 
-
-dot_env = os.path.join(settings.BASE_DIR, '.env')
-load_dotenv(dotenv_path=dot_env)
+is_for_docker = False
+if is_for_docker:
+    dot_env = os.path.join(settings.BASE_DIR, 'webapp.env')
+    load_dotenv(dotenv_path=dot_env)
+else:
+    dot_env = os.path.join(settings.BASE_DIR, '.env')
+    load_dotenv(dotenv_path=dot_env)
 
 # Установка переменной окружения для настроек проекта
 os.environ.setdefault(os.getenv('CELERY_KEY'), 'config.settings')

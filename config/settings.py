@@ -15,12 +15,16 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-dot_env = os.path.join(BASE_DIR, '.env')
-load_dotenv(dotenv_path=dot_env)
+#  We need to load environment variables from a separate file for two ways (local and Docker)
+is_for_docker = False
+if is_for_docker:
+    dot_env = os.path.join(BASE_DIR, 'webapp.env')
+    load_dotenv(dotenv_path=dot_env)
+else:
+    dot_env = os.path.join(BASE_DIR, '.env')
+    load_dotenv(dotenv_path=dot_env)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -90,10 +94,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('DATABASE_ENGINE'),
-        'HOST': os.getenv('DATABASE_HOST'),
         'NAME': os.getenv('DATABASE_NAME'),
         'USER': os.getenv('DATABASE_USER'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
         'PORT': os.getenv('DATABASE_PORT'),
     }
 }

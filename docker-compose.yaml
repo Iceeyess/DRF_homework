@@ -1,0 +1,47 @@
+version: '3.12'
+services:
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: drf_homework
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - backend
+  drf_app:
+    image: drf_app:latest
+    build: .
+    command: python manage.py runserver
+    volumes:
+      - .:/DRF_homework/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+    environment:
+      env_file: "webapp.env"
+    networks:
+      - backend
+  redis:
+    image: redis:latest
+    environment:
+      env_file: "webapp.env"
+    networks:
+      - backend
+  celery:
+    image: celery:latest
+    command: celery -A config worker --loglevel=info & celery -A config beat --loglevel=info &
+    volumes:
+      - .:/DRF_homework/
+    depends_on:
+      - redis
+    environment:
+      env_file: "webapp.env"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+

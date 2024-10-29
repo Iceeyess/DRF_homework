@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 
 from config import settings
 
-is_for_docker = False
-if is_for_docker:
+
+if settings.is_for_docker:
     dot_env = os.path.join(settings.BASE_DIR, 'webapp.env')
     load_dotenv(dotenv_path=dot_env)
 else:

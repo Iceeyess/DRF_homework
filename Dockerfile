@@ -1,5 +1,5 @@
 # Используем базовый образ Python
-FROM python:3.11
+FROM python:3.12.3
 
 # Устанавливаем рабочую директорию в контейнере
 WORKDIR /app
@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Команда для запуска приложения при старте контейнера
-CMD ["python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+CMD ["python3 manage.py migrate && python manage.py runserver 0.0.0.0:8000"]

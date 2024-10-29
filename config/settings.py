@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 #  We need to load environment variables from a separate file for two ways (local and Docker)
-is_for_docker = False
+is_for_docker = True
 if is_for_docker:
     dot_env = os.path.join(BASE_DIR, 'webapp.env')
     load_dotenv(dotenv_path=dot_env)

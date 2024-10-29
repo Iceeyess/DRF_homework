@@ -1,4 +1,4 @@
-version: '3.12'
+version: '3.12.3-slim'
 services:
   database:
     image: postgres:latest
@@ -12,7 +12,7 @@ services:
   drf_app:
     image: drf_app:latest
     build: .
-    command: python manage.py runserver
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/DRF_homework/
     ports:
@@ -31,7 +31,7 @@ services:
       - backend
   celery:
     image: celery:latest
-    command: ["sh", "-c", "celery -A config worker --loglevel=info && celery -A config beat --loglevel=info"]
+    command: sh -c "celery -A config worker --loglevel=info && celery -A config beat --loglevel=info"
     volumes:
       - .:/DRF_homework/
     depends_on:

@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 #  We need to load environment variables from a separate file for two ways (local and Docker)
+# variable  is_for_docker is for flexibility
 is_for_docker = True
 if is_for_docker:
     dot_env = os.path.join(BASE_DIR, 'webapp.env')
@@ -141,9 +142,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = (
-    BASE_DIR / "static/",
-)
+# STATICFILES_DIRS = (
+#     BASE_DIR / "static/",
+# )
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL[1:])
@@ -219,10 +220,10 @@ SECREY_KEY_IN_STRIPE = os.getenv('SECREY_KEY_IN_STRIPE')
 # Настройки для Celery
 
 # URL-адрес брокера сообщений
-CELERY_BROKER_URL = 'redis://localhost:6379/0' # Например, Redis, который по умолчанию работает на порту 6379
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER')# Например, Redis, который по умолчанию работает на порту 6379
 
 # URL-адрес брокера результатов, также Redis
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 # Часовой пояс для работы Celery
 
 # redis connection

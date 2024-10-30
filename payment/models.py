@@ -1,7 +1,5 @@
 from datetime import datetime
-
 from django.db import models
-
 from materials.models import Course, Lesson
 from users.models import User
 from config.settings import AUTH_USER_MODEL

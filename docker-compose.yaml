@@ -1,6 +1,6 @@
 version: '3.12.3-slim'
 services:
-  database:
+  db:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
@@ -18,7 +18,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - database
+      - db
     environment:
       env_file: "webapp.env"
     networks:
@@ -29,7 +29,12 @@ services:
       - backend
   celery:
     image: celery:latest
-    command: sh -c "celery -A config worker --loglevel=info && celery -A config beat --loglevel=info"
+    command:
+      - /bin/sh
+      - -c
+      - |
+        celery -A config worker --loglevel=info
+        celery -A config beat --loglevel=info
     volumes:
       - .:/app
     depends_on:

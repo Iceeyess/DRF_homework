@@ -1,20 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
-from dotenv import load_dotenv
 
-from config import settings
-
-
-if settings.is_for_docker:
-    dot_env = os.path.join(settings.BASE_DIR, 'webapp.env')
-    load_dotenv(dotenv_path=dot_env)
-else:
-    dot_env = os.path.join(settings.BASE_DIR, '.env')
-    load_dotenv(dotenv_path=dot_env)
 
 # Установка переменной окружения для настроек проекта
-os.environ.setdefault(os.getenv('CELERY_KEY'), 'config.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 # Создание экземпляра объекта Celery
 app = Celery('config')

@@ -14,7 +14,7 @@ services:
     build: .
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - .:/DRF_homework/
+      - .:/app
     ports:
       - "8000:8000"
     depends_on:
@@ -31,7 +31,7 @@ services:
     image: celery:latest
     command: sh -c "celery -A config worker --loglevel=info && celery -A config beat --loglevel=info"
     volumes:
-      - .:/DRF_homework/
+      - .:/app
     depends_on:
       - redis
       - drf_app

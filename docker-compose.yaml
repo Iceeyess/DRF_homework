@@ -1,4 +1,4 @@
-version: '3.12.3-slim'
+version: '3.9'
 services:
   db:
     image: postgres:latest
@@ -9,6 +9,10 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - backend
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
   drf_app:
     image: drf_app:latest
     build: .
@@ -18,23 +22,20 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       env_file: "webapp.env"
     networks:
       - backend
+      - frontend
   redis:
     image: redis:latest
     networks:
       - backend
-  celery:
-    image: celery:latest
-    command:
-      - /bin/sh
-      - -c
-      - |
-        celery -A config worker --loglevel=info
-        celery -A config beat --loglevel=info
+  celery_worker:
+    build: .
+    command: celery -A config worker --loglevel=info
     volumes:
       - .:/app
     depends_on:
@@ -42,8 +43,30 @@ services:
       - drf_app
     networks:
       - backend
-
+  celery_beat:
+    build: .
+    command: celery -A config beat --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - drf_app
+    networks:
+      - backend
 networks:
   backend:
+    external: false
+  frontend:
     driver: bridge
 
+volumes:
+  drf_app:
+    driver: local
+  redis:
+    driver: local
+  celery_worker:
+    driver: local
+  celery_beat:
+    driver: local
+  db_data:
+    driver: local
